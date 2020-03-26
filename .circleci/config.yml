@@ -63,15 +63,14 @@ jobs:
           name: Test
           command: npm run test:unit
       - save_npm
+
   deploy:
     machine:
       image: circleci/classic:edge
     steps:
       - checkout
-      # CircleCI に登録した秘密鍵を呼び出す
       - add_ssh_keys
-      # CircleCI に登録した環境変数を使って SSH
-      - run: ssh ${USER_NAME}@${HOST_NAME} 'cd /var/www/vue/circleci-test/ && git pull 
+      - run: ssh ${USER_NAME}@${HOST_NAME} 'cd /var/www/vue/circleci-test/ && git pull' 
 
 workflows:
   pull-request:
@@ -89,3 +88,6 @@ workflows:
       - deploy:
           requires:
             -test
+          filters:
+            branches:
+               only: master
